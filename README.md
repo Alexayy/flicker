@@ -1,5 +1,3 @@
-**Here's a README.md draft for your Linux screenshot app, incorporating best practices and addressing potential issues:**
-
 **# FLICKER: Capture Memories in a Flash ✨**
 
 **FLICKER** is a versatile screenshot application for Linux that empowers you to seamlessly capture, organize, and cherish those fleeting moments on your screen.
