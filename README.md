@@ -1,4 +1,4 @@
-**# FLICKER: Capture Memories in a Flash ✨**
+**FLICKER: Capture Memories in a Flash ✨**
 
 **FLICKER** is a versatile screenshot application for Linux that empowers you to seamlessly capture, organize, and cherish those fleeting moments on your screen.
 
