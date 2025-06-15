@@ -1,5 +1,5 @@
 from pynput import keyboard
-from screenshot import capture_full_screen, capture_selection, capture_screen
+from .screenshot import capture_full_screen, capture_selection, capture_screen
 
 current_keys = set()
 
