@@ -30,7 +30,7 @@
 
 1. Launch the application:
    ```bash
-   python app.py
+   python -m flicker.app
    ```
 2. Use the keyboard shortcuts to capture screenshots:
     - ALT + Shift + S (F9): Capture a selection

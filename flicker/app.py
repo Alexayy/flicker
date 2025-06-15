@@ -1,4 +1,4 @@
-from flicker.keyboard_listener import start_listener
+from .keyboard_listener import start_listener
 
 
 def main():
@@ -7,4 +7,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main();
+    main()
