@@ -2,21 +2,27 @@
 
 from pynput import keyboard
 
-from .screenshot import capture_full_screen, capture_screen, capture_selection
+from .screenshot import (
+    capture_full_screen,
+    capture_selection,
+    capture_window,
+    capture_current_screen,
+)
 
 
 # Hotkeys are registered using the higher level GlobalHotKeys helper so we don't
 # have to track key state manually.
 HOTKEYS = {
     "<cmd>+<shift>+s": capture_selection,
-    "<cmd>+<shift>+w": capture_screen,
+    "<cmd>+<shift>+w": capture_window,
     "<cmd>+<shift>+d": capture_full_screen,
     "<alt>+<shift>+s": capture_selection,
-    "<alt>+<shift>+w": capture_screen,
+    "<alt>+<shift>+w": capture_window,
     "<alt>+<shift>+d": capture_full_screen,
     "<f6>": capture_selection,
-    "<f7>": capture_screen,
+    "<f7>": capture_current_screen,
     "<f8>": capture_full_screen,
+    "<f9>": capture_window,
 }
 
 

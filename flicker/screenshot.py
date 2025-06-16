@@ -7,7 +7,7 @@ from datetime import datetime
 from shutil import which
 
 from PyQt5.QtCore import Qt, QPoint, QRect
-from PyQt5.QtGui import QColor, QPainter, QPen
+from PyQt5.QtGui import QColor, QPainter, QPen, QCursor
 from PyQt5.QtWidgets import QApplication, QWidget
 
 
@@ -117,7 +117,7 @@ def capture_selection():
         app = QApplication.instance() or QApplication(sys.argv)
         screen = app.primaryScreen()
         overlay = _SnipWidget()
-        overlay.show()
+        overlay.showFullScreen()
         app.exec_()
         rect = overlay.selection
         if rect.width() and rect.height():
@@ -130,21 +130,52 @@ def capture_selection():
     _open_file(full_path)
 
 
-def capture_screen():
-    session_type = get_session_type()
-    full_path = generate_file_path("screenshot")
-
-    if session_type == "wayland" and _cmd_exists("grim"):
-        subprocess.run(["grim", full_path])
-    elif session_type == "x11" and _cmd_exists("import"):
-        subprocess.run(["import", full_path])
-    else:
-        app = QApplication.instance() or QApplication(sys.argv)
+def capture_current_screen() -> None:
+    """Capture the display containing the mouse pointer."""
+    app = QApplication.instance() or QApplication(sys.argv)
+    cursor_pos = QCursor.pos()
+    screen = app.screenAt(cursor_pos)
+    if screen is None:
         screen = app.primaryScreen()
-        screenshot = screen.grabWindow(0)
-        screenshot.save(full_path, "png")
-
+    full_path = generate_file_path("screen")
+    screenshot = screen.grabWindow(0)
+    screenshot.save(full_path, "png")
     _open_file(full_path)
+
+
+def capture_window() -> None:
+    """Capture the currently focused window if possible."""
+    session_type = get_session_type()
+    full_path = generate_file_path("window")
+
+    if session_type == "x11" and _cmd_exists("import") and _cmd_exists("xdotool"):
+        try:
+            win_id = (
+                subprocess.check_output(["xdotool", "getactivewindow"]).decode().strip()
+            )
+            subprocess.run(["import", "-window", win_id, full_path])
+        except subprocess.CalledProcessError:
+            pass
+        else:
+            _open_file(full_path)
+            return
+
+    # Fallback to grabbing the screen region of the active window using PyQt
+    app = QApplication.instance() or QApplication(sys.argv)
+    widget = app.activeWindow()
+    screen = app.primaryScreen()
+    if widget:
+        geo = widget.frameGeometry()
+        screenshot = screen.grabWindow(0, geo.x(), geo.y(), geo.width(), geo.height())
+    else:
+        screenshot = screen.grabWindow(0)
+    screenshot.save(full_path, "png")
+    _open_file(full_path)
+
+
+# Backwards compatibility
+def capture_screen() -> None:
+    capture_window()
 
 
 if __name__ == "__main__":

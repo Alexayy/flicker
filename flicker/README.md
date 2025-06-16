@@ -13,8 +13,9 @@
 - Support for both X11 and Wayland display servers.
 - Intuitive keyboard shortcuts for lightning-fast capture:
     - WIN + Shift + S (or ALT + Shift + S / F6): Capture a selection
-    - WIN + Shift + W (or ALT + Shift + W / F7): Capture the current window
-    - WIN + Shift + D (or ALT + Shift + D / F8): Capture the entire screen
+    - WIN + Shift + W (or ALT + Shift + W / F9): Capture the focused window
+    - F7: Capture the screen under the cursor
+    - WIN + Shift + D (or ALT + Shift + D / F8): Capture all screens
 
 **Installation:**
 
@@ -36,11 +37,12 @@
    ```
 2. Use the keyboard shortcuts to capture screenshots:
     - WIN + Shift + S (or ALT + Shift + S / F6): Capture a selection
-    - WIN + Shift + W (or ALT + Shift + W / F7): Capture the current window
-    - WIN + Shift + D (or ALT + Shift + D / F8): Capture the entire screen
+    - WIN + Shift + W (or ALT + Shift + W / F9): Capture the focused window
+    - F7: Capture the screen under the cursor
+    - WIN + Shift + D (or ALT + Shift + D / F8): Capture all screens
 
 Alternatively run ``grab-screen`` for a quick capture and preview. It defaults
-to selection mode but supports ``--full`` and ``--window`` options.
+to selection mode but supports ``--full``, ``--screen`` and ``--window`` options.
 
 ### Running as a background service
 
