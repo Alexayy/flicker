@@ -16,6 +16,7 @@
     - WIN + Shift + D (or ALT + Shift + D / F8): Capture all screens
  - Screenshots are automatically copied to the clipboard and a desktop
    notification confirms the save location
+- A program icon is provided in `resources/flicker.png` and installed with the package.
 
 **Installation:**
 
