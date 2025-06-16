@@ -18,7 +18,15 @@ Thank you for your interest in improving **Flicker**! This document describes ho
    ```bash
    pip install -r flicker/requirements.txt
    ```
-4. **Run Flicker** to verify everything works:
+4. **Install developer tools** (optional)
+   ```bash
+   pip install flake8
+   ```
+5. **Run the linter** to check code style:
+   ```bash
+   make lint
+   ```
+6. **Run Flicker** to verify everything works:
    ```bash
    python -m flicker.app
    ```
