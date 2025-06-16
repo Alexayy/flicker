@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Flicker
+Exec=flicker
+Icon=/usr/share/flicker/flicker.png
+X-GNOME-Autostart-enabled=true
+NoDisplay=true
