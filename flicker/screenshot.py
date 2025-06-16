@@ -7,7 +7,7 @@ from datetime import datetime
 from shutil import which
 
 from PyQt5.QtCore import Qt, QPoint, QRect
-from PyQt5.QtGui import QColor, QPainter, QPen, QCursor
+from PyQt5.QtGui import QColor, QPainter, QPen, QCursor, QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget
 
 
@@ -35,18 +35,18 @@ def _cmd_exists(cmd: str) -> bool:
 
 
 class _SnipWidget(QWidget):
-    """Full-screen overlay for selecting a region on the active screen."""
+    """Transparent overlay for selecting a region on any screen."""
 
-    def __init__(self, screen) -> None:
+    def __init__(self) -> None:
         super().__init__()
         self.begin = QPoint()
         self.end = QPoint()
-        self.screen = screen
         self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setCursor(Qt.CrossCursor)
-        # Limit overlay to the selected screen to avoid black windows on others
-        self.setGeometry(screen.geometry())
+        # Cover the whole virtual desktop so selections can span monitors
+        geometry = QApplication.primaryScreen().virtualGeometry()
+        self.setGeometry(geometry)
 
     def paintEvent(self, event):  # type: ignore[override]
         painter = QPainter(self)
@@ -90,6 +90,28 @@ def generate_file_path(filename_prefix="screenshot"):
     return os.path.join(save_path, filename)
 
 
+def list_monitors() -> None:
+    """Print available monitors and their geometries."""
+    app = QApplication.instance() or QApplication(sys.argv)
+    for idx, screen in enumerate(app.screens(), 1):
+        geom = screen.geometry()
+        print(f"{idx}: {screen.name()} {geom.width()}x{geom.height()} @({geom.x()},{geom.y()})")
+
+
+def capture_monitor(index: int) -> None:
+    """Capture a specific monitor by 1-based index."""
+    app = QApplication.instance() or QApplication(sys.argv)
+    screens = app.screens()
+    if index < 1 or index > len(screens):
+        print(f"Monitor {index} not available")
+        return
+    screen = screens[index - 1]
+    full_path = generate_file_path(f"monitor{index}")
+    screenshot = screen.grabWindow(0)
+    screenshot.save(full_path, "png")
+    _open_file(full_path)
+
+
 def capture_full_screen():
     session_type = get_session_type()
     full_path = generate_file_path("full_screen")
@@ -101,9 +123,19 @@ def capture_full_screen():
     else:
         # Fallback to PyQt grabbing
         app = QApplication.instance() or QApplication(sys.argv)
-        screen = app.primaryScreen()
-        screenshot = screen.grabWindow(0)
-        screenshot.save(full_path, "png")
+        screens = app.screens()
+        if len(screens) == 1:
+            screenshot = screens[0].grabWindow(0)
+            screenshot.save(full_path, "png")
+        else:
+            geom = app.primaryScreen().virtualGeometry()
+            pixmap = QPixmap(geom.size())
+            painter = QPainter(pixmap)
+            for scr in screens:
+                part = scr.grabWindow(0)
+                painter.drawPixmap(scr.geometry().topLeft() - geom.topLeft(), part)
+            painter.end()
+            pixmap.save(full_path, "png")
 
     _open_file(full_path)
 
@@ -119,16 +151,24 @@ def capture_selection():
         subprocess.run(["import", full_path])
     else:
         app = QApplication.instance() or QApplication(sys.argv)
-        screen = app.screenAt(QCursor.pos()) or app.primaryScreen()
-        overlay = _SnipWidget(screen)
+        overlay = _SnipWidget()
         overlay.show()
         app.exec_()
         rect = overlay.selection
         if rect.width() and rect.height():
-            gx = rect.x() - screen.geometry().x()
-            gy = rect.y() - screen.geometry().y()
-            screenshot = screen.grabWindow(0, gx, gy, rect.width(), rect.height())
-            screenshot.save(full_path, "png")
+            screens = app.screens()
+            pixmap = QPixmap(rect.size())
+            painter = QPainter(pixmap)
+            for scr in screens:
+                geom = scr.geometry()
+                inter = rect.intersected(geom)
+                if not inter.isNull():
+                    gx = inter.x() - geom.x()
+                    gy = inter.y() - geom.y()
+                    part = scr.grabWindow(0, gx, gy, inter.width(), inter.height())
+                    painter.drawPixmap(inter.topLeft() - rect.topLeft(), part)
+            painter.end()
+            pixmap.save(full_path, "png")
         else:
             print("Selection cancelled.")
             return

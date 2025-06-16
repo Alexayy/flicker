@@ -41,7 +41,9 @@
 
 You can also call ``grab-screen`` directly for one-off captures. By default it
 lets you select a region and then opens the result with your desktop image
-viewer. Use ``--full``, ``--screen`` or ``--window`` to change the mode.
+viewer. Use ``--full``, ``--screen`` or ``--window`` to change the mode. Run
+``grab-screen --list-monitors`` to see available monitors or ``--monitor 2`` to
+capture a specific display.
 
 ### Running as a background service
 

@@ -43,6 +43,8 @@
 
 Alternatively run ``grab-screen`` for a quick capture and preview. It defaults
 to selection mode but supports ``--full``, ``--screen`` and ``--window`` options.
+Use ``--list-monitors`` to show all displays or ``--monitor N`` to capture a
+specific one.
 
 ### Running as a background service
 
