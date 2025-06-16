@@ -1,6 +1,7 @@
 """Screenshot utilities supporting X11 and Wayland with PyQt fallbacks."""
 
 import os
+import shlex
 import subprocess
 import sys
 from datetime import datetime
@@ -139,25 +140,29 @@ def capture_full_screen():
     full_path = generate_file_path("full_screen")
 
     if session_type == "wayland" and _cmd_exists("grim"):
-        subprocess.run(["grim", full_path])
+        if subprocess.run(["grim", full_path]).returncode == 0:
+            _open_file(full_path)
+            return
     elif session_type == "x11" and _cmd_exists("import"):
-        subprocess.run(["import", "-window", "root", full_path])
+        if subprocess.run(["import", "-window", "root", full_path]).returncode == 0:
+            _open_file(full_path)
+            return
+
+    # Fallback to PyQt grabbing
+    app = QApplication.instance() or QApplication(sys.argv)
+    screens = app.screens()
+    if len(screens) == 1:
+        screenshot = screens[0].grabWindow(0)
+        screenshot.save(full_path, "png")
     else:
-        # Fallback to PyQt grabbing
-        app = QApplication.instance() or QApplication(sys.argv)
-        screens = app.screens()
-        if len(screens) == 1:
-            screenshot = screens[0].grabWindow(0)
-            screenshot.save(full_path, "png")
-        else:
-            geom = app.primaryScreen().virtualGeometry()
-            pixmap = QPixmap(geom.size())
-            painter = QPainter(pixmap)
-            for scr in screens:
-                part = scr.grabWindow(0)
-                painter.drawPixmap(scr.geometry().topLeft() - geom.topLeft(), part)
-            painter.end()
-            pixmap.save(full_path, "png")
+        geom = app.primaryScreen().virtualGeometry()
+        pixmap = QPixmap(geom.size())
+        painter = QPainter(pixmap)
+        for scr in screens:
+            part = scr.grabWindow(0)
+            painter.drawPixmap(scr.geometry().topLeft() - geom.topLeft(), part)
+        painter.end()
+        pixmap.save(full_path, "png")
 
     _open_file(full_path)
 
@@ -167,10 +172,14 @@ def capture_selection():
     full_path = generate_file_path("selection")
 
     if session_type == "wayland" and _cmd_exists("grim") and _cmd_exists("slurp"):
-        cmd = f'grim -g "$(slurp)" {full_path}'
-        subprocess.run(cmd, shell=True, executable="/bin/bash")
+        cmd = ["bash", "-c", f'grim -g "$(slurp)" {shlex.quote(full_path)}']
+        if subprocess.run(cmd).returncode == 0:
+            _open_file(full_path)
+            return
     elif session_type == "x11" and _cmd_exists("import"):
-        subprocess.run(["import", full_path])
+        if subprocess.run(["import", full_path]).returncode == 0:
+            _open_file(full_path)
+            return
     else:
         app = QApplication.instance() or QApplication(sys.argv)
         overlay = _SnipWidget()
@@ -221,7 +230,7 @@ def capture_window() -> None:
             win_id = (
                 subprocess.check_output(["xdotool", "getactivewindow"]).decode().strip()
             )
-            subprocess.run(["import", "-window", win_id, full_path])
+            subprocess.run(["import", "-window", win_id, full_path], check=True)
         except subprocess.CalledProcessError:
             pass
         else:
