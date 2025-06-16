@@ -22,6 +22,10 @@ dependencies = [
     "pynput",
 ]
 
+[project.scripts]
+flicker = "flicker.app:main"
+grab-screen = "flicker.grab_screen:main"
+
 [tool.setuptools]
 packages = ["flicker"]
 
