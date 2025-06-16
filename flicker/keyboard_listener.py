@@ -1,51 +1,28 @@
+"""Keyboard hotkey listener for screenshot actions."""
+
 from pynput import keyboard
-from .screenshot import capture_full_screen, capture_selection, capture_screen
 
-current_keys = set()
-
-
-def on_press(key):
-    current_keys.add(key)
-
-    # Windows-like shortcut: Win + Shift + S
-    if {keyboard.Key.cmd, keyboard.Key.shift,
-        keyboard.KeyCode.from_char('s')} <= current_keys:
-        print("Capturing selection...")
-        capture_selection()
-    # Legacy shortcut: Alt + Shift + S or F9
-    elif {keyboard.Key.alt_l, keyboard.Key.shift,
-          keyboard.KeyCode.from_char('s')} <= current_keys or key == keyboard.Key.f9:
-        print("Capturing selection...")
-        capture_selection()
-
-    elif {keyboard.Key.cmd, keyboard.Key.shift,
-          keyboard.KeyCode.from_char('w')} <= current_keys:
-        print("Capturing screen...")
-        capture_screen()
-    elif {keyboard.Key.alt_l, keyboard.Key.shift,
-          keyboard.KeyCode.from_char('w')} <= current_keys or key == keyboard.Key.f10:
-        print("Capturing screen...")
-        capture_screen()
-
-    elif {keyboard.Key.cmd, keyboard.Key.shift,
-          keyboard.KeyCode.from_char('d')} <= current_keys:
-        print("Capturing full screen...")
-        capture_full_screen()
-    elif {keyboard.Key.alt_l, keyboard.Key.shift,
-          keyboard.KeyCode.from_char('d')} <= current_keys or key == keyboard.Key.f11:
-        print("Capturing full screen...")
-        capture_full_screen()
+from .screenshot import capture_full_screen, capture_screen, capture_selection
 
 
-def on_release(key):
-    try:
-        current_keys.remove(key)
-    except KeyError:
-        pass
+# Hotkeys are registered using the higher level GlobalHotKeys helper so we don't
+# have to track key state manually.
+HOTKEYS = {
+    "<cmd>+<shift>+s": capture_selection,
+    "<cmd>+<shift>+w": capture_screen,
+    "<cmd>+<shift>+d": capture_full_screen,
+    "<alt>+<shift>+s": capture_selection,
+    "<alt>+<shift>+w": capture_screen,
+    "<alt>+<shift>+d": capture_full_screen,
+    "<f6>": capture_selection,
+    "<f7>": capture_screen,
+    "<f8>": capture_full_screen,
+}
 
 
-def start_listener():
-    with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+def start_listener() -> None:
+    """Start listening for global hotkeys."""
+    with keyboard.GlobalHotKeys(HOTKEYS) as listener:
         listener.join()
 
 
