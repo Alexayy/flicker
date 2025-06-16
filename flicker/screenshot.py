@@ -104,8 +104,12 @@ def get_session_type():
 
 
 def generate_file_path(filename_prefix="screenshot"):
-    home_dir = os.path.expanduser('~')
-    save_path = os.path.join(home_dir, 'Pictures', 'FLICKERs')
+    save_dir = os.getenv("FLICKER_DIR")
+    if save_dir:
+        save_path = os.path.expanduser(save_dir)
+    else:
+        home_dir = os.path.expanduser('~')
+        save_path = os.path.join(home_dir, 'Pictures', 'FLICKERs')
     os.makedirs(save_path, exist_ok=True)
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     filename = f"{filename_prefix}_{timestamp}.png"
