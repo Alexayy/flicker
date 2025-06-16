@@ -68,7 +68,7 @@ This starts the hotkey listener automatically on login.
 
 **Contributing:**
 
-Your contributions are warmly welcomed! Please refer to the CONTRIBUTING.md for guidelines - when CONTRIBUTING.md gets written, that is...
+Your contributions are warmly welcomed! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 **Built With:**
 
