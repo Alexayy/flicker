@@ -1,0 +1,11 @@
+Package: flicker
+Version: 0.1-1
+Architecture: all
+Maintainer: Aleksa Cakic <aleksa.cakic@gmail.com>
+Installed-Size: 14
+Depends: init-system-helpers (>= 1.52)
+Section: utils
+Priority: optional
+Homepage: https://github.com/Alexayy/flicker
+Description: Screenshot hotkey listener
+ Flicker provides global hotkeys for taking screenshots on Linux.

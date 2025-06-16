@@ -1,0 +1,26 @@
+Format: 1.8
+Date: Mon, 16 Jun 2025 00:00:00 +0000
+Source: flicker
+Binary: flicker
+Built-For-Profiles: noudeb
+Architecture: all
+Version: 0.1-1
+Distribution: unstable
+Urgency: medium
+Maintainer: Aleksa Cakic <aleksa.cakic@gmail.com>
+Changed-By: Aleksa Cakic <aleksa.cakic@gmail.com>
+Description:
+ flicker    - Screenshot hotkey listener
+Changes:
+ flicker (0.1-1) unstable; urgency=medium
+ .
+   * Initial package
+Checksums-Sha1:
+ d1c5b69b29a4c97d3e12659ea2285e41909b4bd3 1812 flicker_0.1-1_all.deb
+ 96bc65f6feeb5e0bf265299c4eda665a35104bcf 11611 flicker_0.1-1_amd64.buildinfo
+Checksums-Sha256:
+ aa25269324541c4bbaf62d980cb7af466a153932e1cb679ff2ee52418d52fab6 1812 flicker_0.1-1_all.deb
+ 9b1c56f407097efd1eae0211d2b71df11a9ec6055afedf7896ada867e3435fa3 11611 flicker_0.1-1_amd64.buildinfo
+Files:
+ f0d0826135609ae1ce9971b1f147b473 1812 utils optional flicker_0.1-1_all.deb
+ 5931ec2858c00b1ade4a5ddf526ef301 11611 utils optional flicker_0.1-1_amd64.buildinfo
