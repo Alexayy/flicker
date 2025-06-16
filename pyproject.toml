@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flicker"
+version = "0.1.0"
+description = "Screenshot hotkey listener"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{name = "Aleksa Cakić", email = "aleksa.cakic@gmail.com"}]
+license = {file = "LICENSE"}
+keywords = ["screenshots", "hotkeys"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+urls = {"Homepage" = "https://github.com/Alexayy/flicker"}
+
+dependencies = [
+    "PyQt5",
+    "pynput",
+]
+
+[tool.setuptools]
+packages = ["flicker"]
+
+[tool.setuptools.package-data]
+flicker = []
+
+[tool.setuptools.data-files]
+"share/flicker" = ["resources/flicker.png"]
