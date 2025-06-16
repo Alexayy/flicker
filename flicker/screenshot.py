@@ -74,7 +74,7 @@ class _SnipWidget(QWidget):
         painter = QPainter(self)
         painter.setPen(QPen(Qt.red, 2))
         painter.fillRect(self.rect(), QColor(0, 0, 0, 100))
-        rect = QRect(self.begin, self.end)
+        rect = QRect(self.begin, self.end).normalized()
         painter.fillRect(rect, Qt.transparent)
         painter.drawRect(rect)
 
