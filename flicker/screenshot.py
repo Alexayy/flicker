@@ -98,7 +98,6 @@ class _SnipWidget(QWidget):
         rect.moveTopLeft(self.mapToGlobal(rect.topLeft()))
         return rect
 
-
 def get_session_type():
     """Return the current desktop session type."""
     return os.getenv('XDG_SESSION_TYPE')

@@ -32,5 +32,5 @@ Flicker provides global hotkeys for taking screenshots on Linux.
 %{python3_sitelib}/flicker*
 
 %changelog
-* Mon Jan 01 2025 Example Maintainer <maintainer@example.com> - 0.1-1
+* Mon Jan 01 2025 Aleksa Cakic <aleksa.cakic@gmail.com> - 0.1-1
 - Initial package
