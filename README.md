@@ -14,6 +14,8 @@
     - WIN + Shift + W (or ALT + Shift + W / F9): Capture the focused window
     - F7: Capture the screen under the cursor
     - WIN + Shift + D (or ALT + Shift + D / F8): Capture all screens
+ - Screenshots are automatically copied to the clipboard and a desktop
+   notification confirms the save location
 
 **Installation:**
 
@@ -61,7 +63,6 @@ This starts the hotkey listener automatically on login.
 - Customizable save locations and filename conventions.
 - Annotations and editing tools for screenshots.
 - Graphical user interface (GUI) for enhanced user experience.
-- Copy to clipboard
 - Better support for X11 and Wayland
 
 **Contributing:**
