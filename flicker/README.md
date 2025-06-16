@@ -12,9 +12,9 @@
 - Save screenshots in a dedicated `Pictures/FLICKERs` folder for effortless organization.
 - Support for both X11 and Wayland display servers.
 - Intuitive keyboard shortcuts for lightning-fast capture:
-    - ALT + Shift + S (F9): Capture a selection
-    - ALT + Shift + W (F10): Capture the current window
-    - ALT + Shift + D (F11): Capture the entire screen
+    - WIN + Shift + S (or ALT + Shift + S / F9): Capture a selection
+    - WIN + Shift + W (or ALT + Shift + W / F10): Capture the current window
+    - WIN + Shift + D (or ALT + Shift + D / F11): Capture the entire screen
 
 **Installation:**
 
@@ -35,9 +35,23 @@
    python -m flicker.app
    ```
 2. Use the keyboard shortcuts to capture screenshots:
-    - ALT + Shift + S (F9): Capture a selection
-    - ALT + Shift + W (F10): Capture the current window
-    - ALT + Shift + D (F11): Capture the entire screen
+    - WIN + Shift + S (or ALT + Shift + S / F9): Capture a selection
+    - WIN + Shift + W (or ALT + Shift + W / F10): Capture the current window
+    - WIN + Shift + D (or ALT + Shift + D / F11): Capture the entire screen
+
+Alternatively run ``grab-screen`` for a quick capture and preview. It defaults
+to selection mode but supports ``--full`` and ``--window`` options.
+
+### Running as a background service
+
+Copy ``flicker.service`` to ``~/.config/systemd/user/`` and enable it:
+
+```bash
+systemctl --user daemon-reload
+systemctl --user enable --now flicker.service
+```
+
+This starts the hotkey listener automatically on login.
 
 **Planned Features:**
 

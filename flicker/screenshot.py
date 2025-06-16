@@ -6,6 +6,24 @@ from datetime import datetime
 from PyQt5.QtWidgets import QApplication
 
 
+def _open_file(filepath: str) -> None:
+    """Try to open ``filepath`` with a desktop image viewer.
+
+    This function attempts ``xdg-open`` (Linux) or ``open`` (macOS). If
+    neither is available the path is printed so the user can open it
+    manually.
+    """
+    print(f"Screenshot saved as {filepath}")
+    commands = [['xdg-open', filepath], ['open', filepath]]
+    for cmd in commands:
+        try:
+            subprocess.Popen(cmd)
+            return
+        except FileNotFoundError:
+            continue
+    print("Unable to automatically open the screenshot.")
+
+
 def get_session_type():
     print(os.getenv('XDG_SESSION_TYPE'))
     return os.getenv('XDG_SESSION_TYPE')
@@ -33,7 +51,7 @@ def capture_full_screen():
         return
 
     subprocess.run(cmd)
-    print(f"Full screen screenshot saved as {full_path}")
+    _open_file(full_path)
 
 
 def capture_selection():
@@ -50,7 +68,7 @@ def capture_selection():
         print("Unsupported session type.")
         return
 
-    print(f"Selection screenshot saved as {full_path}")
+    _open_file(full_path)
 
 
 def capture_screen():
@@ -76,7 +94,7 @@ def capture_screen():
     screenshot = screen.grabWindow(0)
     screenshot.save(full_path, 'png')
 
-    print(f"Screenshot saved as {full_path}")
+    _open_file(full_path)
 
 
 if __name__ == "__main__":
