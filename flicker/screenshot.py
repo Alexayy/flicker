@@ -35,16 +35,18 @@ def _cmd_exists(cmd: str) -> bool:
 
 
 class _SnipWidget(QWidget):
-    """Simple full-screen overlay for selecting a region."""
+    """Full-screen overlay for selecting a region on the active screen."""
 
-    def __init__(self) -> None:
+    def __init__(self, screen) -> None:
         super().__init__()
         self.begin = QPoint()
         self.end = QPoint()
+        self.screen = screen
         self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
-        self.setWindowState(self.windowState() | Qt.WindowFullScreen)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setCursor(Qt.CrossCursor)
+        # Limit overlay to the selected screen to avoid black windows on others
+        self.setGeometry(screen.geometry())
 
     def paintEvent(self, event):  # type: ignore[override]
         painter = QPainter(self)
@@ -69,7 +71,9 @@ class _SnipWidget(QWidget):
 
     @property
     def selection(self) -> QRect:
-        return QRect(self.begin, self.end).normalized()
+        rect = QRect(self.begin, self.end).normalized()
+        rect.moveTopLeft(self.mapToGlobal(rect.topLeft()))
+        return rect
 
 
 def get_session_type():
@@ -115,13 +119,15 @@ def capture_selection():
         subprocess.run(["import", full_path])
     else:
         app = QApplication.instance() or QApplication(sys.argv)
-        screen = app.primaryScreen()
-        overlay = _SnipWidget()
-        overlay.showFullScreen()
+        screen = app.screenAt(QCursor.pos()) or app.primaryScreen()
+        overlay = _SnipWidget(screen)
+        overlay.show()
         app.exec_()
         rect = overlay.selection
         if rect.width() and rect.height():
-            screenshot = screen.grabWindow(0, rect.x(), rect.y(), rect.width(), rect.height())
+            gx = rect.x() - screen.geometry().x()
+            gy = rect.y() - screen.geometry().y()
+            screenshot = screen.grabWindow(0, gx, gy, rect.width(), rect.height())
             screenshot.save(full_path, "png")
         else:
             print("Selection cancelled.")
@@ -166,7 +172,10 @@ def capture_window() -> None:
     screen = app.primaryScreen()
     if widget:
         geo = widget.frameGeometry()
-        screenshot = screen.grabWindow(0, geo.x(), geo.y(), geo.width(), geo.height())
+        screen = app.screenAt(geo.center()) or screen
+        gx = geo.x() - screen.geometry().x()
+        gy = geo.y() - screen.geometry().y()
+        screenshot = screen.grabWindow(0, gx, gy, geo.width(), geo.height())
     else:
         screenshot = screen.grabWindow(0)
     screenshot.save(full_path, "png")
