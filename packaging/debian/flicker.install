@@ -1,1 +1,1 @@
-../flicker.service usr/lib/systemd/user/
+flicker.service usr/lib/systemd/user/
