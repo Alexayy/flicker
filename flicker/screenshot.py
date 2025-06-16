@@ -11,6 +11,26 @@ from PyQt5.QtGui import QColor, QPainter, QPen, QCursor, QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget
 
 
+def _notify(msg: str) -> None:
+    """Send a desktop notification if possible."""
+    commands = [['notify-send', msg], ['osascript', '-e', f'display notification "{msg}"']]
+    for cmd in commands:
+        try:
+            subprocess.Popen(cmd)
+            return
+        except FileNotFoundError:
+            continue
+    print(msg)
+
+
+def _copy_to_clipboard(filepath: str) -> None:
+    """Copy the image at ``filepath`` to the clipboard."""
+    app = QApplication.instance() or QApplication(sys.argv)
+    pixmap = QPixmap(filepath)
+    if not pixmap.isNull():
+        app.clipboard().setPixmap(pixmap)
+
+
 def _open_file(filepath: str) -> None:
     """Try to open ``filepath`` with a desktop image viewer.
 
@@ -19,6 +39,8 @@ def _open_file(filepath: str) -> None:
     manually.
     """
     print(f"Screenshot saved as {filepath}")
+    _copy_to_clipboard(filepath)
+    _notify(f"Screenshot saved as {filepath}")
     commands = [['xdg-open', filepath], ['open', filepath]]
     for cmd in commands:
         try:
