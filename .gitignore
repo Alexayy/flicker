@@ -434,3 +434,16 @@ pip-selfcheck.json
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/venv,python,pycharm,pycharm+iml,pycharm+all,visualstudiocode
+
+# Packaging artifacts
+*.deb
+*.buildinfo
+*.changes
+*.dsc
+*.tar.gz
+*.tar.xz
+*.rpm
+*.src.rpm
+*.flatpak
+*.snap
+
