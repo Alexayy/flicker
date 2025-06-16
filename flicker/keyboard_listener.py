@@ -1,28 +1,40 @@
-"""Keyboard hotkey listener for screenshot actions."""
+"""Keyboard hotkey listener for screenshot actions.
+
+The actual screenshot grabbing is delegated to the ``grab_screen`` CLI. This
+ensures that any PyQt code runs in a separate process and avoids the common
+``QApplication was not created in the main() thread`` errors.
+"""
+
+from __future__ import annotations
+
+import subprocess
+import sys
 
 from pynput import keyboard
 
-from .screenshot import (
-    capture_full_screen,
-    capture_selection,
-    capture_window,
-    capture_current_screen,
-)
+
+def _spawn_cli(flag: str | None = None) -> None:
+    """Launch the grab-screen CLI in a new process."""
+    cmd = [sys.executable, "-m", "flicker.grab_screen"]
+    if flag:
+        cmd.append(flag)
+    subprocess.Popen(cmd)
 
 
 # Hotkeys are registered using the higher level GlobalHotKeys helper so we don't
-# have to track key state manually.
+# have to track key state manually. Each hotkey simply calls the CLI with the
+# appropriate flag.
 HOTKEYS = {
-    "<cmd>+<shift>+s": capture_selection,
-    "<cmd>+<shift>+w": capture_window,
-    "<cmd>+<shift>+d": capture_full_screen,
-    "<alt>+<shift>+s": capture_selection,
-    "<alt>+<shift>+w": capture_window,
-    "<alt>+<shift>+d": capture_full_screen,
-    "<f6>": capture_selection,
-    "<f7>": capture_current_screen,
-    "<f8>": capture_full_screen,
-    "<f9>": capture_window,
+    "<cmd>+<shift>+s": lambda: _spawn_cli("--selection"),
+    "<cmd>+<shift>+w": lambda: _spawn_cli("--window"),
+    "<cmd>+<shift>+d": lambda: _spawn_cli("--full"),
+    "<alt>+<shift>+s": lambda: _spawn_cli("--selection"),
+    "<alt>+<shift>+w": lambda: _spawn_cli("--window"),
+    "<alt>+<shift>+d": lambda: _spawn_cli("--full"),
+    "<f6>": lambda: _spawn_cli("--selection"),
+    "<f7>": lambda: _spawn_cli("--screen"),
+    "<f8>": lambda: _spawn_cli("--full"),
+    "<f9>": lambda: _spawn_cli("--window"),
 }
 
 
