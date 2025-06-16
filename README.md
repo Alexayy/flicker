@@ -29,6 +29,12 @@
    cd flicker
    pip install -r requirements.txt
    ```
+3. To install the packaged release on Debian/Ubuntu based systems run:
+   ```bash
+   sudo dpkg -i flicker_<version>_all.deb
+   sudo apt-get -f install  # installs any missing dependencies
+   ```
+   The package declares dependencies on `PyQt5` and `pynput`, so `apt-get -f install` will automatically fetch them if they are not present.
 
 **Usage:**
 
