@@ -7,7 +7,8 @@
 **Features:**
 
 - Capture full screen, specific windows, or custom selections with ease.
-- Save screenshots in a dedicated `Pictures/FLICKERs` folder for effortless organization.
+ - Save screenshots in a dedicated `Pictures/FLICKERs` folder by default.
+ - Set the `FLICKER_DIR` environment variable to use a custom save location.
 - Support for both X11 and Wayland display servers.
 - Intuitive keyboard shortcuts for lightning-fast capture:
     - WIN + Shift + S (or ALT + Shift + S / F6): Capture a selection
