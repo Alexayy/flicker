@@ -1,3 +1,9 @@
+flicker (0.1-2) unstable; urgency=medium
+
+  * Add missing build dependencies for pyproject builds.
+
+ -- Aleksa Cakic <aleksa.cakic@gmail.com>  Tue, 17 Jun 2025 16:24:36 +0000
+
 flicker (0.1-1) unstable; urgency=medium
 
   * Initial package
