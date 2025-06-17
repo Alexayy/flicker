@@ -35,3 +35,6 @@ flicker = []
 [tool.setuptools.data-files]
 "share/flicker" = ["resources/flicker.png"]
 "etc/xdg/autostart" = ["resources/flicker.desktop"]
+
+[tool.flake8]
+max-line-length = 120
