@@ -1,0 +1,12 @@
+version: 1
+AppDir:
+  path: ./AppDir
+  app_info:
+    id: com.github.flicker
+    name: Flicker
+    icon: flicker
+    version: "0.1"
+    exec: usr/bin/python3
+    exec_args: -m flicker.app
+script:
+  - pip3 install --prefix="$APPDIR/usr" ..
