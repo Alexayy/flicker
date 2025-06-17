@@ -43,6 +43,13 @@
      Download the `.AppImage` from the releases page, mark it as executable and
      run it directly.
 
+     To build your own AppImage:
+     1. Install `appimage-builder` (requires Python 3 and FUSE to run AppImages).
+     2. Run:
+        ```bash
+        appimage-builder --recipe packaging/appimage/AppImageBuilder.yml
+        ```
+
 **Usage:**
 
 1. Launch the application:
