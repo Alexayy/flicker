@@ -43,14 +43,14 @@ To build a Debian package from this source tree install the required build
 dependencies and run the Debian tools from the packaging directory:
 
 ```bash
-cd packaging/debian
+cd packaging
 sudo apt-get build-dep .
 # or install the helper
 sudo apt-get install python3-build
 dpkg-buildpackage -us -uc -b
 ```
 
-The resulting `.deb` will appear one directory above `packaging/debian`.
+The resulting `.deb` will appear one directory above `packaging`.
 
 **Usage:**
 
