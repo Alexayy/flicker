@@ -4,9 +4,17 @@ AppDir:
   app_info:
     id: com.github.flicker
     name: Flicker
-    icon: flicker
+    icon: flicker.png
     version: "0.1"
     exec: usr/bin/python3
     exec_args: -m flicker.app
+  runtime:
+    arch: ["x86_64"]
+  files:
+    include:
+      - ../../resources/flicker.png
 script:
-  - pip3 install --prefix="$APPDIR/usr" ..
+  - pip3 install --prefix="$TARGET_APPDIR/usr" ../..
+  - mkdir -p "$TARGET_APPDIR/usr/bin"
+  - cp /usr/bin/python3 "$TARGET_APPDIR/usr/bin/"
+  - install -Dm644 ../../resources/flicker.png "$TARGET_APPDIR/usr/share/icons/hicolor/256x256/apps/flicker.png"
