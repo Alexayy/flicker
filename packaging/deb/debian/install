@@ -1,0 +1,3 @@
+resources/flicker.png usr/share/icons/hicolor/256x256/apps/
+resources/flicker.desktop usr/share/applications/
+flicker.service lib/systemd/system/
