@@ -6,8 +6,8 @@ import sys
 from pathlib import Path
 from threading import Thread
 
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QAction, QMenu, QSystemTrayIcon
+from PyQt6.QtGui import QIcon, QAction
+from PyQt6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 
 from .keyboard_listener import start_listener
 
@@ -38,7 +38,7 @@ def main() -> None:
     tray.setContextMenu(menu)
     tray.show()
 
-    app.exec_()
+    app.exec()
 
 
 if __name__ == "__main__":

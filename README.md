@@ -103,7 +103,7 @@ Your contributions are warmly welcomed! Please see [CONTRIBUTING.md](CONTRIBUTIN
 **Built With:**
 
 - Python
-- PyQt5
+ - PyQt6
 - pynput
 - grim (for Wayland)
 - import (for X11)

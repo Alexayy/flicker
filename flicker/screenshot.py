@@ -7,9 +7,9 @@ import sys
 from datetime import datetime
 from shutil import which
 
-from PyQt5.QtCore import Qt, QPoint, QRect
-from PyQt5.QtGui import QColor, QPainter, QPen, QCursor, QPixmap
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt6.QtCore import Qt, QPoint, QRect
+from PyQt6.QtGui import QColor, QPainter, QPen, QCursor, QPixmap
+from PyQt6.QtWidgets import QApplication, QWidget
 
 
 def _notify(msg: str) -> None:
@@ -64,19 +64,21 @@ class _SnipWidget(QWidget):
         super().__init__()
         self.begin = QPoint()
         self.end = QPoint()
-        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
-        self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setCursor(Qt.CrossCursor)
+        self.setWindowFlags(
+            Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint
+        )
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setCursor(Qt.CursorShape.CrossCursor)
         # Cover the whole virtual desktop so selections can span monitors
         geometry = QApplication.primaryScreen().virtualGeometry()
         self.setGeometry(geometry)
 
     def paintEvent(self, event):  # type: ignore[override]
         painter = QPainter(self)
-        painter.setPen(QPen(Qt.red, 2))
+        painter.setPen(QPen(Qt.GlobalColor.red, 2))
         painter.fillRect(self.rect(), QColor(0, 0, 0, 100))
         rect = QRect(self.begin, self.end).normalized()
-        painter.fillRect(rect, Qt.transparent)
+        painter.fillRect(rect, Qt.GlobalColor.transparent)
         painter.drawRect(rect)
 
     def mousePressEvent(self, event):  # type: ignore[override]
@@ -188,7 +190,7 @@ def capture_selection():
         app = QApplication.instance() or QApplication(sys.argv)
         overlay = _SnipWidget()
         overlay.show()
-        app.exec_()
+        app.exec()
         rect = overlay.selection
         if rect.width() and rect.height():
             screens = app.screens()
