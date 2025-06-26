@@ -35,13 +35,23 @@
      ```bash
      flatpak install flathub com.github.flicker
      ```
-   - **Snap**:
-     ```bash
-     sudo snap install flicker
-     ```
-   - **AppImage**:
-     Download the `.AppImage` from the releases page, mark it as executable and
-     run it directly.
+  - **Snap**:
+    ```bash
+    sudo snap install flicker
+    ```
+  - **Deb package**:
+    Build it from the `packaging/deb` directory:
+    ```bash
+    dpkg-buildpackage -us -uc -b
+    ```
+  - **RPM package**:
+    Use the spec file under `packaging/rpm`:
+    ```bash
+    rpmbuild -ba packaging/rpm/flicker.spec
+    ```
+  - **AppImage**:
+    Download the `.AppImage` from the releases page, mark it as executable and
+    run it directly.
 
      To build your own AppImage:
      1. Install `appimage-builder` (requires Python 3 and FUSE to run AppImages).
