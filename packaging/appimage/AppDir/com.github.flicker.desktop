@@ -1,0 +1,11 @@
+[Desktop Entry]
+X-AppImage-Arch=<MISSING>
+X-AppImage-Version=0.1
+X-AppImage-Name=Flicker
+Name=Flicker
+Exec=usr/bin/python3
+Icon=flicker.png
+Type=Application
+Terminal=false
+Categories=Utility;
+Comment=
